@@ -1,6 +1,6 @@
-Aqui está o README atualizado com as alterações solicitadas:
 
----
+![Wallpaper - 1400x900](https://github.com/steffens-andressa/planner/assets/142074135/fe583393-99e7-448b-ad94-898afcc34a86)
+
 
 # Trip Planner API
 
