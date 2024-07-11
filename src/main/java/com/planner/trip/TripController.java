@@ -4,6 +4,10 @@ import com.planner.activity.ActivityData;
 import com.planner.activity.ActivityRequestPayload;
 import com.planner.activity.ActivityResponse;
 import com.planner.activity.ActivityService;
+import com.planner.link.LinkData;
+import com.planner.link.LinkRequestPayload;
+import com.planner.link.LinkResponse;
+import com.planner.link.LinkService;
 import com.planner.participant.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +27,8 @@ public class TripController {
     private ParticipantService participantService;
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private LinkService linkService;
     @Autowired TripRepository repository;
 
     /**
@@ -135,5 +141,30 @@ public class TripController {
         List<ParticipantData> participantList = this.participantService.getAllParticipantsFromEvent(id);
 
         return ResponseEntity.ok(participantList);
+    }
+
+    /**
+     * LINKS
+     */
+    @PostMapping("/{id}/links")
+    public ResponseEntity<LinkResponse> registerActivity(@PathVariable UUID id, @RequestBody LinkRequestPayload payload){
+        Optional<Trip> trip = this.repository.findById(id);
+
+        if(trip.isPresent()){
+            Trip rawTrip = trip.get();
+
+            LinkResponse linkResponse = this.linkService.registerLink(payload, rawTrip);
+
+            return ResponseEntity.ok(linkResponse);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/links")
+    public ResponseEntity<List<LinkData>> getAllLinks(@PathVariable UUID id){
+        List<LinkData> linkDataList = this.linkService.getAllLinksFromTrip(id);
+
+        return ResponseEntity.ok(linkDataList);
     }
 }
